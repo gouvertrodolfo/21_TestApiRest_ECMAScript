@@ -44,3 +44,4 @@ export function mwdIsAdmin(req, res, next) {
   }
 }
 
+export default passport

@@ -4,7 +4,7 @@ import  logger from '../../logger.js';
 import dotenv from 'dotenv';
 dotenv.config()
 
-const mongo_url = process.env.MONGO_URL 
+const mongo_url = process.env.MONGO_URL.replace('<username>', process.env.MONGO_DB_USER).replace('<password>', process.env.MONGO_DB_PASSWORD) 
 
 const client = new MongoClient(mongo_url, { serverSelectionTimeOutMS: 5000 });
 await client.connect();
