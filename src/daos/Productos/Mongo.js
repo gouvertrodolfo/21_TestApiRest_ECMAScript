@@ -7,9 +7,10 @@ class ProductosMongo extends Mongo {
         super('productos');
     }
     
-    update(product) {
+    async update(product) {
         const { id, codigo, timestamp, nombre, descripcion, precio, thumbnail, stock } = product
-        this.collection.updateOne(
+
+        const result = await this.collection.updateOne(
             {
                 id: id
             },
@@ -25,8 +26,9 @@ class ProductosMongo extends Mongo {
                     stock: stock
                 }
             })
-            .then()
             .catch(err => { logger.error(err) })
+
+        return result
     }
 
 }

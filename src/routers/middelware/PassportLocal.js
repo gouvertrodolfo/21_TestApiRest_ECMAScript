@@ -1,25 +1,21 @@
 import passport from 'passport';
-import { Strategy } from 'passport-local';
+import { Strategy as LocalStrategy } from 'passport-local';
 
-import { SignUp, login } from '../../controller/login.js';
-import { buscar } from '../../controller/usuarios.js';
+import { SignUp, login } from '../../controller/usuarios.js'
 
-passport.use('signup', new Strategy({ passReqToCallback: true }, SignUp))
+passport.use('signup', new LocalStrategy({ passReqToCallback: true }, SignUp))
 
-passport.use('login', new Strategy(login));
-
+passport.use('login', new LocalStrategy(login));
 
 passport.serializeUser(function (user, done) {
-  done(null, user.username);
+  done(null, user);
 });
 
-passport.deserializeUser(async function (username, done) {
-  const usuario = await buscar(username)
-  done(null, usuario);
+passport.deserializeUser(function (user, done) {
+  done(null, user)
 });
 
-
-export function mwdIsAuth(req, res, next) {
+function mwdIsAuth(req, res, next) {
   if (req.isAuthenticated()) {
     next()
   } else {
@@ -27,21 +23,14 @@ export function mwdIsAuth(req, res, next) {
   }
 }
 
-export function mwdIsAuthweb(req, res, next) {
-  if (req.isAuthenticated()) {
-    next()
-  } else {
-    res.redirect("/login");
-  }
-}
+function mwdIsAdmin(req, res, next) {
 
-export function mwdIsAdmin(req, res, next) {
   if (!req.user.admin) {
-    res.status(401).json({ error: 'ruta no autorizada' })
+    res.status(401).json({ error: `${req.user.username} ruta no autorizada` })
   }
   else {
     next()
   }
 }
 
-export default passport
+export { passport, mwdIsAuth, mwdIsAdmin };

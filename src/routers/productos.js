@@ -5,7 +5,7 @@ import { listar, buscar, crear, actualizar, borrar } from "../controller/product
 /* ------------------------------------------------------ */
 
 // GET '/api/productos' -> devuelve todos los productos.
-productos.get('/', mwdIsAuth, listar);
+productos.get('/', listar);
 
 // GET '/api/productos/:id' -> devuelve un producto según su id.
 productos.get('/:id', mwdIsAuth, buscar );

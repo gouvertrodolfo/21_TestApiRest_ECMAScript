@@ -46,7 +46,7 @@ class Producto {
             this.stock = stock
         }
 
-        await contenedor.update(this)
+        return await contenedor.update(this)
     }
 
     async borrar() {
