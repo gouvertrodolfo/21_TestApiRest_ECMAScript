@@ -6,7 +6,7 @@ import Contenedorknex from './Productos/Knex.js';
 
 config()
 
-const file = process.env.PRODUCTOS_TIPO_PERSISTENCIA;
+const file = process.env.TIPO_PERSISTENCIA;
 
 let contenedor;
 if(file=='Mongo')

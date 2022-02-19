@@ -55,14 +55,14 @@ class Producto {
 
     export() {
         const data = {
-            id: id,
-            timestamp: timestamp,
-            codigo: codigo,
-            nombre: nombre,
-            descripcion: descripcion,
-            precio: precio,
-            thumbnail: thumbnail,
-            stock: stock
+            id: this.id,
+            timestamp: this.timestamp,
+            codigo: this.codigo,
+            nombre: this.nombre,
+            descripcion: this.descripcion,
+            precio: this.precio,
+            thumbnail: this.thumbnail,
+            stock: this.stock
         }
          return data;
     }

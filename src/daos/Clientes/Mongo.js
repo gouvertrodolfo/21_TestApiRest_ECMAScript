@@ -1,10 +1,7 @@
 import { MongoClient, ObjectId } from 'mongodb';
-import  logger from '../../logger.js';
+import logger from '../../logger.js';
 
-import dotenv from 'dotenv';
-dotenv.config()
-
-const mongo_url = process.env.MONGO_URL.replace('<username>', process.env.MONGO_DB_USER).replace('<password>', process.env.MONGO_DB_PASSWORD) 
+const mongo_url = process.env.MONGO_URL
 
 const client = new MongoClient(mongo_url, { serverSelectionTimeOutMS: 5000 });
 await client.connect();
@@ -19,7 +16,6 @@ class Mongo {
 
     // save(Object): Number - Recibe un objeto, lo guarda en el archivo, devuelve el id asignado.
     async create(object) {
-
         await this.collection.insertOne(object)
             .then()
     }

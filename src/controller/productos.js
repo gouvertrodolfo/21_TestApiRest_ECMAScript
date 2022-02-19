@@ -1,4 +1,5 @@
 import * as apiProducto from '../api/Productos.js';
+import schema from '../validations/productos.js';
 
  async function listar(req, res) {
     const array = await apiProducto.listar()
@@ -16,9 +17,18 @@ async function buscar(req, res) {
 };
 
 async function crear(req, res) {
-    let object = req.body
-    const producto = await apiProducto.crear(object)
-    res.status(200).json(producto.export())
+    
+    try{
+        const data = await schema.validateAsync(req.body)
+        const producto = await apiProducto.crear(data)
+        res.status(200).json(producto.export())
+    
+    }
+    catch(err)
+    {
+        console.log(err)
+        res.status(400).json(err)
+    }
 }
 
 async function actualizar(req, res) {
