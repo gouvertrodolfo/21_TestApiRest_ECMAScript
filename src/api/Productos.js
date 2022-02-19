@@ -24,7 +24,7 @@ class Producto {
 
     }
 
-    modificar(data) {
+    async modificar(data) {
 
         const { nombre, descripcion, precio, thumbnail, stock } = data
 
@@ -46,11 +46,11 @@ class Producto {
             this.stock = stock
         }
 
-        contenedor.update(this.id, this)
+        await contenedor.update(this)
     }
 
-    borrar() {
-        contenedor.deleteById(this.id)
+    async borrar() {
+        return await contenedor.deleteById(this.id)
     }
 
     export() {

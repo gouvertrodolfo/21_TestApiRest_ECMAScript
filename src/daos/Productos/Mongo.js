@@ -9,7 +9,6 @@ class ProductosMongo extends Mongo {
     
     update(product) {
         const { id, codigo, timestamp, nombre, descripcion, precio, thumbnail, stock } = product
-
         this.collection.updateOne(
             {
                 id: id

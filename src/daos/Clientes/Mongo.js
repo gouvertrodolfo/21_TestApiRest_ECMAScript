@@ -51,14 +51,13 @@ class Mongo {
 
     // deleteAll(): void - Elimina todos los objetos presentes en el archivo
     async deleteAll() {
-        this.collection.findOne({}).deleteAll()
+        this.collection.find({}).deleteAll()
     }
 
     async deleteById(id) {
-        this.collection.deleteOne({ id: Number.parseInt(id) }, function (err, obj) {
-            if (err) throw err;
-            logger.error("1 document deleted");
-        });
+        const result = await this.collection.deleteOne({ id: id })
+
+        return result;
     }
 
 }
