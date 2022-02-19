@@ -2,8 +2,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-console.log(process.env)
-
 export default {
   NODE_ENV: process.env.NODE_ENV || 'development',
   HOST: process.env.HOST || 'localhost',

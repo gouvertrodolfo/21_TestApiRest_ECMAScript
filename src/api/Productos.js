@@ -46,11 +46,11 @@ class Producto {
             this.stock = stock
         }
 
-        contenedor.actualizar(this.id, this)
+        contenedor.update(this.id, this)
     }
 
     borrar() {
-        contenedor.borrar(this.id)
+        contenedor.deleteById(this.id)
     }
 
     export() {
