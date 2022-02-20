@@ -11,7 +11,7 @@ productos.get('/', listar);
 productos.get('/:id', mwdIsAuth, buscar );
 
 // POST '/api/productos' -> recibe y agrega un producto, y lo devuelve con su id asignado.
-productos.post('/', crear);
+productos.post('/', mwdIsAuth, mwdIsAdmin, crear);
 
 // PUT '/api/productos/:id' -> recibe y actualiza un producto según su id.
 productos.put('/:id', mwdIsAuth, mwdIsAdmin, actualizar);

@@ -1,69 +1,106 @@
-import Usuarios from '../daos/Usuarios.js';
-import { compareSync, hashSync, genSaltSync } from 'bcrypt';
-import  logger from '../logger.js';
+import { contenedor } from '../daos/Usuarios.js';
+import bCrypt from 'bcrypt';
+import logger from '../logger.js'
 
-export async function buscarXUsername( username) 
-{
-    const usuario = await Usuarios.getByUserName(username);
+class Usuario {
+
+    constructor(data) {
+        const { _id, username, password, email, firstName, lastName, avatar, admin } = data;
+
+        if (_id == undefined) {
+            this._id = undefined;
+            this.admin = false;
+            this.password = createHash(password)
+        }
+        else {
+            this._id = _id;
+            this.admin = admin;
+            this.password = password;
+        }
+
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.avatar = avatar;
+
+    }
+
+    get() {
+        const user = {
+            username: this.username,
+            email: this.email,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            avatar: this.avatar,
+            admin: this.admin
+        }
+        return user;
+    }
+
+    isValidPassword(password) {
+        return bCrypt.compareSync(password, this.password);
+    }
+
+
+    guardar() {
+        if (this._id == undefined) {
+            contenedor.create(this)
+        }
+        else {
+            contenedor.actualizar(this)
+        }
+    }
+
+}
+
+function createHash(password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
+
+
+export async function existe(username) {
+
+    const data = await contenedor.getByUserName(username);
+    if (data == undefined) {
+        console.log('existe false')
+        return false;
+    }
+    console.log(data)
+    return true;
+}
+
+export async function buscar(username) {
+
+    const data = await contenedor.getByUserName(username);
+    if (data == undefined) {
+        err = {
+            codigo: 400,
+            descripcion: `${username} no es un usuario registrado`
+        }
+        throw err
+    }
+
+    const usuario = new Usuario(data);
 
     return usuario;
 }
 
-export async function registrarUsuario( user, callback ) 
-{
 
-    const usuario = await Usuarios.getByUserName(user.username);
+export async function registrar(data) {
 
-    if (usuario == undefined) {
-  
-        try {
-            user.password = createHash(user.password)
-            user.admin = false;
-            
-            const usuarioReg = await Usuarios.create(user)
+    try {
+        const usuario = new Usuario(data)
+        await usuario.guardar()
 
-            logger.info(`Passport registro Ok `);
-
-            return callback(null, usuarioReg);
-        }
-        catch (err) {
-            logger.info(`Error in Saving user: ${err}`);
-            return callback(err);
-        }
-
+        logger.info(`Registro Ok `);
+        return usuario;
     }
-    else {
-        logger.warn('username already exists');
-        return callback(null, false)
+    catch (err) {
+        logger.error(`Error in Saving user: ${err}`);
+        throw (err);
     }
-
 }
 
-export async function loginUsuario(username, password, callback)
-{
-    const usuario = await Usuarios.getByUserName(username);
-
-    if (usuario == undefined) {
-        logger.warn(`User Not Found with username ${usuario}`);
-        return callback(null, false);
-    }
-
-    if (!isValidPassword(usuario, password)) {
-        logger.warn(`Username ${usuario} Invalid Password`);
-        return callback(null, false);
-    }
-
-    return callback(null, usuario);
-
-}
-
-
-function isValidPassword(user, password) {
-    return compareSync(password, user.password);
-}
-
-function createHash(password) {
-    return hashSync(password, genSaltSync(10), null);
-}
 
 

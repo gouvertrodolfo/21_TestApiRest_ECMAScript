@@ -26,7 +26,7 @@ function mwdIsAuth(req, res, next) {
 function mwdIsAdmin(req, res, next) {
 
   if (!req.user.admin) {
-    res.status(401).json({ error: `${req.user.username} ruta no autorizada` })
+    res.status(403).json({ error: `${req.user.username} ruta no autorizada` })
   }
   else {
     next()

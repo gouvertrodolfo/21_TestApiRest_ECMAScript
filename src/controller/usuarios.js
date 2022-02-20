@@ -1,11 +1,11 @@
 import * as UsuarioApi from '../api/Usuario.js'
 import logger from '../logger.js'
 
-export function SignUp(req, username, password, done) {
+export async function SignUp(req, username, password, done) {
 
 
-    if (UsuarioApi.existe(username)) {
-        logger.warn('username already exists');
+    if ( await UsuarioApi.existe(username) ) {
+        logger.warn( `username ${username} already exists`);
         req.error = { error: "username already exists" }
         return done(null, false)
     } else {
@@ -18,7 +18,7 @@ export function SignUp(req, username, password, done) {
             lastName: req.body.lastName,
             avatar: req.body.avatar
         };
-        const user = UsuarioApi.registrar(data);
+        const user = await UsuarioApi.registrar(data);
 
         registrarUsuario(user.get(), done);
     }
